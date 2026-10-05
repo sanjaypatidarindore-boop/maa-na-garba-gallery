@@ -19,7 +19,7 @@
 }
 
 body{
-    font-family:Arial, sans-serif;
+    font-family:Arial,sans-serif;
     background:#fff7e6;
     color:#4a2100;
     min-height:100vh;
@@ -179,7 +179,10 @@ audio{
         <h2 class="section-title">🎵 Garba Music</h2>
 
         <div class="audio-box">
-            <div id="musicName" style="margin-bottom:10px;font-weight:bold;"></div>
+            <div id="musicName"
+                 style="margin-bottom:10px;font-weight:bold;">
+            </div>
+
             <audio id="musicPlayer"
                    controls
                    preload="metadata">
@@ -205,13 +208,7 @@ audio{
     Editor: Sanjay Patidar
 </footer>
 
-
 <script>
-
-/* =========================================================
-   माँ ना गरबा — ONLINE GALLERY
-   Netlify Page + Supabase Manifest
-   ========================================================= */
 
 const SUPABASE_URL =
     "https://pwdxbgjsduqqfsejednc.supabase.co";
@@ -220,12 +217,57 @@ const SUPABASE_BUCKET =
     "garba-media";
 
 
+/* =====================================================
+   GALLERY ID
+   दोनों लिंक स्वीकार होंगे:
+
+   1. ?gallery=ABC123
+   2. /ABC123/
+
+   ===================================================== */
+
 function getGalleryID(){
 
     const params =
-        new URLSearchParams(window.location.search);
+        new URLSearchParams(
+            window.location.search
+        );
 
-    return params.get("gallery");
+    const queryID =
+        params.get("gallery");
+
+    if(queryID){
+        return queryID;
+    }
+
+
+    const path =
+        window.location.pathname
+        .split("/")
+        .filter(Boolean);
+
+    /*
+       उदाहरण:
+
+       /maa-na-garba-gallery/ABC123/
+
+       आखिरी हिस्सा ABC123 होगा
+    */
+
+    const last =
+        path.length
+            ? path[path.length - 1]
+            : "";
+
+    if(
+        last &&
+        last !== "maa-na-garba-gallery" &&
+        last !== "index.html"
+    ){
+        return decodeURIComponent(last);
+    }
+
+    return "";
 }
 
 
@@ -315,7 +357,8 @@ function createMediaCard(item){
         img.src = url;
 
         img.alt =
-            item.name || "माँ ना गरबा फोटो";
+            item.name ||
+            "माँ ना गरबा फोटो";
 
         img.loading = "lazy";
 
@@ -350,20 +393,23 @@ function createMediaCard(item){
         "card-name";
 
     name.textContent =
-        item.name || "माँ ना गरबा";
+        item.name ||
+        "माँ ना गरबा";
 
     card.appendChild(name);
-
 
     return card;
 }
 
 
-function showItems(list, container){
+function showItems(list,container){
 
     container.innerHTML = "";
 
-    if(!Array.isArray(list) || list.length === 0){
+    if(
+        !Array.isArray(list) ||
+        list.length === 0
+    ){
 
         const empty =
             document.createElement("div");
@@ -445,7 +491,10 @@ function setupMusic(music){
 
 function setupAds(ads){
 
-    if(!Array.isArray(ads) || ads.length === 0){
+    if(
+        !Array.isArray(ads) ||
+        ads.length === 0
+    ){
         return;
     }
 
@@ -487,7 +536,7 @@ async function loadGallery(){
 
         status.innerHTML =
             "❌ Gallery Link सही नहीं है।<br><br>" +
-            "Link में <b>?gallery=...</b> होना चाहिए।";
+            "Link में <b>Gallery ID</b> होना चाहिए।";
 
         return;
     }
@@ -512,9 +561,6 @@ async function loadGallery(){
 
 
         if(!response.ok){
-
-            const errorText =
-                await response.text();
 
             throw new Error(
                 "Manifest नहीं मिला (" +
@@ -556,6 +602,7 @@ async function loadGallery(){
 
         setupAds(ads);
 
+
         setupMusic(
             manifest.music
         );
@@ -566,13 +613,16 @@ async function loadGallery(){
 
         status.innerHTML =
             "✅ Gallery तैयार है<br>" +
-            "📸 " + media.length +
+            "📸 " +
+            media.length +
             " Photos/Videos" +
-            (ads.length
-                ? " &nbsp; 📢 " +
-                  ads.length +
-                  " Ads"
-                : "");
+            (
+                ads.length
+                    ? " &nbsp; 📢 " +
+                      ads.length +
+                      " Ads"
+                    : ""
+            );
 
 
         if(manifest.colony){
@@ -597,7 +647,10 @@ async function loadGallery(){
         status.innerHTML =
             "❌ Gallery लोड नहीं हो पाई।<br><br>" +
             "<small>" +
-            (error.message || error) +
+            (
+                error.message ||
+                error
+            ) +
             "</small>";
     }
 }
