@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width,
+      initial-scale=1.0,
+      maximum-scale=1.0,
+      user-scalable=no">
+
+<title>🌺 माँ ना गरबा 🌺</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:Arial, sans-serif;
+    background:#fff7e6;
+    color:#4a2100;
+    min-height:100vh;
+}
+
+.header{
+    background:linear-gradient(135deg,#ff7a00,#e91e63);
+    color:white;
+    text-align:center;
+    padding:22px 12px;
+    box-shadow:0 3px 10px rgba(0,0,0,.2);
+}
+
+.header h1{
+    font-size:28px;
+    margin-bottom:7px;
+}
+
+.header p{
+    font-size:15px;
+}
+
+.container{
+    width:100%;
+    max-width:1100px;
+    margin:auto;
+    padding:15px;
+}
+
+.status{
+    text-align:center;
+    background:white;
+    border-radius:12px;
+    padding:15px;
+    margin-bottom:15px;
+    box-shadow:0 2px 8px rgba(0,0,0,.12);
+}
+
+.status.error{
+    color:#b00020;
+}
+
+.section-title{
+    font-size:22px;
+    margin:20px 0 12px;
+    padding-bottom:7px;
+    border-bottom:2px solid #ff9800;
+}
+
+.gallery{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(170px,1fr));
+    gap:12px;
+}
+
+.card{
+    background:white;
+    border-radius:12px;
+    overflow:hidden;
+    box-shadow:0 2px 8px rgba(0,0,0,.15);
+}
+
+.card img,
+.card video{
+    width:100%;
+    display:block;
+    background:#111;
+}
+
+.card img{
+    height:190px;
+    object-fit:cover;
+}
+
+.card video{
+    max-height:300px;
+}
+
+.card-name{
+    padding:8px;
+    font-size:13px;
+    word-break:break-word;
+}
+
+.audio-box{
+    background:white;
+    border-radius:12px;
+    padding:15px;
+    box-shadow:0 2px 8px rgba(0,0,0,.12);
+}
+
+audio{
+    width:100%;
+}
+
+.empty{
+    text-align:center;
+    padding:25px;
+    background:white;
+    border-radius:12px;
+    color:#777;
+}
+
+.footer{
+    text-align:center;
+    padding:25px 10px;
+    color:#777;
+    font-size:13px;
+}
+
+.loading{
+    display:inline-block;
+    animation:pulse 1s infinite;
+}
+
+@keyframes pulse{
+    50%{opacity:.4;}
+}
+
+@media(max-width:500px){
+
+    .header h1{
+        font-size:24px;
+    }
+
+    .gallery{
+        grid-template-columns:repeat(2,1fr);
+        gap:9px;
+    }
+
+    .card img{
+        height:145px;
+    }
+
+    .container{
+        padding:10px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header class="header">
+    <h1>🌺 माँ ना गरबा 🌺</h1>
+    <p>Redwood Park Premium</p>
+    <p>नव गरबा मंडल • 2026</p>
+</header>
+
+<main class="container">
+
+    <div id="status" class="status">
+        <span class="loading">⏳ Gallery लोड हो रही है...</span>
+    </div>
+
+    <section id="musicSection" style="display:none;">
+        <h2 class="section-title">🎵 Garba Music</h2>
+
+        <div class="audio-box">
+            <div id="musicName" style="margin-bottom:10px;font-weight:bold;"></div>
+            <audio id="musicPlayer"
+                   controls
+                   preload="metadata">
+            </audio>
+        </div>
+    </section>
+
+    <section>
+        <h2 class="section-title">📸 Photos & Videos</h2>
+        <div id="mediaGallery" class="gallery"></div>
+    </section>
+
+    <section id="adsSection" style="display:none;">
+        <h2 class="section-title">📢 Special</h2>
+        <div id="adsGallery" class="gallery"></div>
+    </section>
+
+</main>
+
+<footer class="footer">
+    🌺 माँ ना गरबा 🌺<br>
+    Redwood Park Premium • नव गरबा मंडल 2026<br>
+    Editor: Sanjay Patidar
+</footer>
+
+
+<script>
+
+/* =========================================================
+   माँ ना गरबा — ONLINE GALLERY
+   Netlify Page + Supabase Manifest
+   ========================================================= */
+
+const SUPABASE_URL =
+    "https://pwdxbgjsduqqfsejednc.supabase.co";
+
+const SUPABASE_BUCKET =
+    "garba-media";
+
+
+function getGalleryID(){
+
+    const params =
+        new URLSearchParams(window.location.search);
+
+    return params.get("gallery");
+}
+
+
+function getManifestURL(galleryID){
+
+    return (
+        SUPABASE_URL +
+        "/storage/v1/object/public/" +
+        SUPABASE_BUCKET +
+        "/maa-na-garba/galleries/" +
+        encodeURIComponent(galleryID) +
+        "/manifest.json"
+    );
+}
+
+
+function isVideo(item){
+
+    const type =
+        String(item.type || "").toLowerCase();
+
+    const name =
+        String(item.name || "").toLowerCase();
+
+    return (
+        type.startsWith("video/") ||
+        /\.(mp4|webm|mov|m4v|avi)$/i.test(name)
+    );
+}
+
+
+function isImage(item){
+
+    const type =
+        String(item.type || "").toLowerCase();
+
+    const name =
+        String(item.name || "").toLowerCase();
+
+    return (
+        type.startsWith("image/") ||
+        /\.(jpg|jpeg|png|gif|webp|bmp|heic)$/i.test(name)
+    );
+}
+
+
+function createMediaCard(item){
+
+    const card =
+        document.createElement("div");
+
+    card.className = "card";
+
+    const url =
+        item.url || "";
+
+    if(!url){
+        return null;
+    }
+
+
+    if(isVideo(item)){
+
+        const video =
+            document.createElement("video");
+
+        video.src = url;
+
+        video.controls = true;
+
+        video.preload = "metadata";
+
+        video.playsInline = true;
+
+        video.setAttribute(
+            "playsinline",
+            ""
+        );
+
+        card.appendChild(video);
+
+    }else{
+
+        const img =
+            document.createElement("img");
+
+        img.src = url;
+
+        img.alt =
+            item.name || "माँ ना गरबा फोटो";
+
+        img.loading = "lazy";
+
+        img.onerror = function(){
+
+            this.style.display = "none";
+
+            const error =
+                document.createElement("div");
+
+            error.style.padding = "20px";
+
+            error.style.textAlign = "center";
+
+            error.textContent =
+                "❌ Photo load नहीं हुई";
+
+            card.insertBefore(
+                error,
+                card.firstChild
+            );
+        };
+
+        card.appendChild(img);
+    }
+
+
+    const name =
+        document.createElement("div");
+
+    name.className =
+        "card-name";
+
+    name.textContent =
+        item.name || "माँ ना गरबा";
+
+    card.appendChild(name);
+
+
+    return card;
+}
+
+
+function showItems(list, container){
+
+    container.innerHTML = "";
+
+    if(!Array.isArray(list) || list.length === 0){
+
+        const empty =
+            document.createElement("div");
+
+        empty.className = "empty";
+
+        empty.textContent =
+            "अभी कोई फोटो/वीडियो उपलब्ध नहीं है।";
+
+        container.appendChild(empty);
+
+        return;
+    }
+
+
+    let count = 0;
+
+    list.forEach(function(item){
+
+        const card =
+            createMediaCard(item);
+
+        if(card){
+
+            container.appendChild(card);
+
+            count++;
+        }
+    });
+
+
+    if(count === 0){
+
+        const empty =
+            document.createElement("div");
+
+        empty.className = "empty";
+
+        empty.textContent =
+            "Media दिखाई नहीं दे रहा है।";
+
+        container.appendChild(empty);
+    }
+}
+
+
+function setupMusic(music){
+
+    if(!music || !music.url){
+        return;
+    }
+
+    const section =
+        document.getElementById(
+            "musicSection"
+        );
+
+    const player =
+        document.getElementById(
+            "musicPlayer"
+        );
+
+    const name =
+        document.getElementById(
+            "musicName"
+        );
+
+    section.style.display =
+        "block";
+
+    name.textContent =
+        "🎵 " +
+        (music.name || "Garba Music");
+
+    player.src =
+        music.url;
+}
+
+
+function setupAds(ads){
+
+    if(!Array.isArray(ads) || ads.length === 0){
+        return;
+    }
+
+    const section =
+        document.getElementById(
+            "adsSection"
+        );
+
+    const gallery =
+        document.getElementById(
+            "adsGallery"
+        );
+
+    section.style.display =
+        "block";
+
+    showItems(
+        ads,
+        gallery
+    );
+}
+
+
+async function loadGallery(){
+
+    const status =
+        document.getElementById(
+            "status"
+        );
+
+    const galleryID =
+        getGalleryID();
+
+
+    if(!galleryID){
+
+        status.className =
+            "status error";
+
+        status.innerHTML =
+            "❌ Gallery Link सही नहीं है।<br><br>" +
+            "Link में <b>?gallery=...</b> होना चाहिए।";
+
+        return;
+    }
+
+
+    const manifestURL =
+        getManifestURL(galleryID);
+
+
+    try{
+
+        status.innerHTML =
+            "⏳ Gallery data लोड हो रहा है...";
+
+
+        const response =
+            await fetch(
+                manifestURL +
+                "?t=" +
+                Date.now()
+            );
+
+
+        if(!response.ok){
+
+            const errorText =
+                await response.text();
+
+            throw new Error(
+                "Manifest नहीं मिला (" +
+                response.status +
+                ")"
+            );
+        }
+
+
+        const manifest =
+            await response.json();
+
+
+        console.log(
+            "Gallery Manifest:",
+            manifest
+        );
+
+
+        const media =
+            Array.isArray(manifest.media)
+                ? manifest.media
+                : [];
+
+
+        const ads =
+            Array.isArray(manifest.ads)
+                ? manifest.ads
+                : [];
+
+
+        showItems(
+            media,
+            document.getElementById(
+                "mediaGallery"
+            )
+        );
+
+
+        setupAds(ads);
+
+        setupMusic(
+            manifest.music
+        );
+
+
+        status.className =
+            "status";
+
+        status.innerHTML =
+            "✅ Gallery तैयार है<br>" +
+            "📸 " + media.length +
+            " Photos/Videos" +
+            (ads.length
+                ? " &nbsp; 📢 " +
+                  ads.length +
+                  " Ads"
+                : "");
+
+
+        if(manifest.colony){
+
+            document.title =
+                "🌺 माँ ना गरबा 🌺 - " +
+                manifest.colony;
+        }
+
+
+    }catch(error){
+
+        console.error(
+            "Gallery Error:",
+            error
+        );
+
+
+        status.className =
+            "status error";
+
+        status.innerHTML =
+            "❌ Gallery लोड नहीं हो पाई।<br><br>" +
+            "<small>" +
+            (error.message || error) +
+            "</small>";
+    }
+}
+
+
+loadGallery();
+
+</script>
+
+</body>
+</html>
