@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="hi">
 <head>
+
 <meta charset="UTF-8">
 
 <meta name="viewport"
@@ -12,6 +13,7 @@
 <title>🌺 माँ ना गरबा 🌺</title>
 
 <style>
+
 *{
     margin:0;
     padding:0;
@@ -40,6 +42,7 @@ body{
 
 .header p{
     font-size:15px;
+    margin-top:3px;
 }
 
 .container{
@@ -71,7 +74,8 @@ body{
 
 .gallery{
     display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(170px,1fr));
+    grid-template-columns:
+        repeat(auto-fit,minmax(170px,1fr));
     gap:12px;
 }
 
@@ -136,7 +140,9 @@ audio{
 }
 
 @keyframes pulse{
-    50%{opacity:.4;}
+    50%{
+        opacity:.4;
+    }
 }
 
 @media(max-width:500px){
@@ -146,7 +152,8 @@ audio{
     }
 
     .gallery{
-        grid-template-columns:repeat(2,1fr);
+        grid-template-columns:
+            repeat(2,1fr);
         gap:9px;
     }
 
@@ -158,57 +165,117 @@ audio{
         padding:10px;
     }
 }
+
 </style>
+
 </head>
 
 <body>
 
 <header class="header">
+
     <h1>🌺 माँ ना गरबा 🌺</h1>
+
     <p>Redwood Park Premium</p>
+
     <p>नव गरबा मंडल • 2026</p>
+
 </header>
+
 
 <main class="container">
 
     <div id="status" class="status">
-        <span class="loading">⏳ Gallery लोड हो रही है...</span>
+
+        <span class="loading">
+            ⏳ Gallery लोड हो रही है...
+        </span>
+
     </div>
 
-    <section id="musicSection" style="display:none;">
-        <h2 class="section-title">🎵 Garba Music</h2>
+
+    <!-- MUSIC -->
+
+    <section id="musicSection"
+             style="display:none;">
+
+        <h2 class="section-title">
+            🎵 Garba Music
+        </h2>
 
         <div class="audio-box">
+
             <div id="musicName"
-                 style="margin-bottom:10px;font-weight:bold;">
+                 style="margin-bottom:10px;
+                        font-weight:bold;">
             </div>
 
             <audio id="musicPlayer"
                    controls
                    preload="metadata">
             </audio>
+
         </div>
+
     </section>
+
+
+    <!-- MEDIA -->
 
     <section>
-        <h2 class="section-title">📸 Photos & Videos</h2>
-        <div id="mediaGallery" class="gallery"></div>
+
+        <h2 class="section-title">
+            📸 Photos & Videos
+        </h2>
+
+        <div id="mediaGallery"
+             class="gallery">
+        </div>
+
     </section>
 
-    <section id="adsSection" style="display:none;">
-        <h2 class="section-title">📢 Special</h2>
-        <div id="adsGallery" class="gallery"></div>
+
+    <!-- ADS -->
+
+    <section id="adsSection"
+             style="display:none;">
+
+        <h2 class="section-title">
+            📢 Special
+        </h2>
+
+        <div id="adsGallery"
+             class="gallery">
+        </div>
+
     </section>
 
 </main>
 
+
 <footer class="footer">
+
     🌺 माँ ना गरबा 🌺<br>
+
     Redwood Park Premium • नव गरबा मंडल 2026<br>
+
     Editor: Sanjay Patidar
+
 </footer>
 
+
 <script>
+
+/* =========================================================
+   माँ ना गरबा
+   ONLINE GALLERY
+   GitHub Pages + Supabase
+   ========================================================= */
+
+
+/* =========================================================
+   SUPABASE
+   ========================================================= */
 
 const SUPABASE_URL =
     "https://pwdxbgjsduqqfsejednc.supabase.co";
@@ -217,16 +284,33 @@ const SUPABASE_BUCKET =
     "garba-media";
 
 
-/* =====================================================
-   GALLERY ID
-   दोनों लिंक स्वीकार होंगे:
+/* =========================================================
+   GALLERY BASE URL
+   ========================================================= */
 
-   1. ?gallery=ABC123
-   2. /ABC123/
+const GALLERY_BASE_URL =
+    "https://jparedarindore.github.io/maa-na-garba-gallery/";
 
-   ===================================================== */
+
+/* =========================================================
+   GET GALLERY ID
+   =========================================================
+
+   यह दोनों लिंक स्वीकार करेगा:
+
+   1.
+   ?gallery=ABC123
+
+   2.
+   /ABC123/
+
+   ========================================================= */
 
 function getGalleryID(){
+
+    /* -----------------------------------------
+       पहले ?gallery=XXXX चेक करें
+       ----------------------------------------- */
 
     const params =
         new URLSearchParams(
@@ -237,39 +321,53 @@ function getGalleryID(){
         params.get("gallery");
 
     if(queryID){
-        return queryID;
+
+        return decodeURIComponent(
+            queryID.trim()
+        );
+
     }
 
+
+    /* -----------------------------------------
+       अब /XXXX/ वाला URL चेक करें
+       ----------------------------------------- */
 
     const path =
         window.location.pathname
         .split("/")
         .filter(Boolean);
 
-    /*
-       उदाहरण:
 
-       /maa-na-garba-gallery/ABC123/
+    if(path.length > 0){
 
-       आखिरी हिस्सा ABC123 होगा
-    */
+        const last =
+            path[path.length - 1];
 
-    const last =
-        path.length
-            ? path[path.length - 1]
-            : "";
 
-    if(
-        last &&
-        last !== "maa-na-garba-gallery" &&
-        last !== "index.html"
-    ){
-        return decodeURIComponent(last);
+        if(
+            last !== "index.html" &&
+            last !== "maa-na-garba-gallery" &&
+            last !== "maa-na-garba-gallery.html"
+        ){
+
+            return decodeURIComponent(
+                last.trim()
+            );
+
+        }
+
     }
 
+
     return "";
+
 }
 
+
+/* =========================================================
+   MANIFEST URL
+   ========================================================= */
 
 function getManifestURL(galleryID){
 
@@ -281,110 +379,194 @@ function getManifestURL(galleryID){
         encodeURIComponent(galleryID) +
         "/manifest.json"
     );
+
 }
 
+
+/* =========================================================
+   VIDEO CHECK
+   ========================================================= */
 
 function isVideo(item){
 
     const type =
-        String(item.type || "").toLowerCase();
+        String(
+            item.type || ""
+        ).toLowerCase();
 
     const name =
-        String(item.name || "").toLowerCase();
+        String(
+            item.name || ""
+        ).toLowerCase();
+
 
     return (
+
         type.startsWith("video/") ||
-        /\.(mp4|webm|mov|m4v|avi)$/i.test(name)
+
+        /\.(mp4|webm|mov|m4v|avi|mkv)$/i
+        .test(name)
+
     );
+
 }
 
+
+/* =========================================================
+   IMAGE CHECK
+   ========================================================= */
 
 function isImage(item){
 
     const type =
-        String(item.type || "").toLowerCase();
+        String(
+            item.type || ""
+        ).toLowerCase();
 
     const name =
-        String(item.name || "").toLowerCase();
+        String(
+            item.name || ""
+        ).toLowerCase();
+
 
     return (
+
         type.startsWith("image/") ||
-        /\.(jpg|jpeg|png|gif|webp|bmp|heic)$/i.test(name)
+
+        /\.(jpg|jpeg|png|gif|webp|bmp|heic|heif)$/i
+        .test(name)
+
     );
+
 }
 
+
+/* =========================================================
+   CREATE MEDIA CARD
+   ========================================================= */
 
 function createMediaCard(item){
 
     const card =
         document.createElement("div");
 
-    card.className = "card";
+    card.className =
+        "card";
+
 
     const url =
-        item.url || "";
+        item.url ||
+        item.publicUrl ||
+        item.src ||
+        "";
+
 
     if(!url){
+
         return null;
+
     }
 
+
+    /* -----------------------------------------
+       VIDEO
+       ----------------------------------------- */
 
     if(isVideo(item)){
 
         const video =
             document.createElement("video");
 
-        video.src = url;
+        video.src =
+            url;
 
-        video.controls = true;
+        video.controls =
+            true;
 
-        video.preload = "metadata";
+        video.preload =
+            "metadata";
 
-        video.playsInline = true;
+        video.playsInline =
+            true;
 
         video.setAttribute(
             "playsinline",
             ""
         );
 
-        card.appendChild(video);
+        video.setAttribute(
+            "webkit-playsinline",
+            ""
+        );
 
-    }else{
+        card.appendChild(
+            video
+        );
+
+    }
+
+
+    /* -----------------------------------------
+       IMAGE
+       ----------------------------------------- */
+
+    else{
 
         const img =
             document.createElement("img");
 
-        img.src = url;
+        img.src =
+            url;
 
         img.alt =
             item.name ||
             "माँ ना गरबा फोटो";
 
-        img.loading = "lazy";
+        img.loading =
+            "lazy";
 
-        img.onerror = function(){
 
-            this.style.display = "none";
+        img.onerror =
+            function(){
 
-            const error =
-                document.createElement("div");
+                this.style.display =
+                    "none";
 
-            error.style.padding = "20px";
 
-            error.style.textAlign = "center";
+                const error =
+                    document.createElement("div");
 
-            error.textContent =
-                "❌ Photo load नहीं हुई";
+                error.style.padding =
+                    "20px";
 
-            card.insertBefore(
-                error,
-                card.firstChild
-            );
-        };
+                error.style.textAlign =
+                    "center";
 
-        card.appendChild(img);
+                error.style.color =
+                    "#b00020";
+
+                error.textContent =
+                    "❌ Photo load नहीं हुई";
+
+
+                card.insertBefore(
+                    error,
+                    card.firstChild
+                );
+
+            };
+
+
+        card.appendChild(
+            img
+        );
+
     }
 
+
+    /* -----------------------------------------
+       FILE NAME
+       ----------------------------------------- */
 
     const name =
         document.createElement("div");
@@ -396,15 +578,29 @@ function createMediaCard(item){
         item.name ||
         "माँ ना गरबा";
 
-    card.appendChild(name);
+
+    card.appendChild(
+        name
+    );
+
 
     return card;
+
 }
 
 
-function showItems(list,container){
+/* =========================================================
+   SHOW ITEMS
+   ========================================================= */
 
-    container.innerHTML = "";
+function showItems(
+    list,
+    container
+){
+
+    container.innerHTML =
+        "";
+
 
     if(
         !Array.isArray(list) ||
@@ -414,31 +610,45 @@ function showItems(list,container){
         const empty =
             document.createElement("div");
 
-        empty.className = "empty";
+        empty.className =
+            "empty";
 
         empty.textContent =
             "अभी कोई फोटो/वीडियो उपलब्ध नहीं है।";
 
-        container.appendChild(empty);
+
+        container.appendChild(
+            empty
+        );
 
         return;
+
     }
 
 
-    let count = 0;
+    let count =
+        0;
 
-    list.forEach(function(item){
 
-        const card =
-            createMediaCard(item);
+    list.forEach(
+        function(item){
 
-        if(card){
+            const card =
+                createMediaCard(item);
 
-            container.appendChild(card);
 
-            count++;
+            if(card){
+
+                container.appendChild(
+                    card
+                );
+
+                count++;
+
+            }
+
         }
-    });
+    );
 
 
     if(count === 0){
@@ -446,21 +656,37 @@ function showItems(list,container){
         const empty =
             document.createElement("div");
 
-        empty.className = "empty";
+        empty.className =
+            "empty";
 
         empty.textContent =
             "Media दिखाई नहीं दे रहा है।";
 
-        container.appendChild(empty);
+
+        container.appendChild(
+            empty
+        );
+
     }
+
 }
 
 
+/* =========================================================
+   MUSIC
+   ========================================================= */
+
 function setupMusic(music){
 
-    if(!music || !music.url){
+    if(
+        !music ||
+        !music.url
+    ){
+
         return;
+
     }
+
 
     const section =
         document.getElementById(
@@ -477,17 +703,31 @@ function setupMusic(music){
             "musicName"
         );
 
+
     section.style.display =
         "block";
 
+
     name.textContent =
         "🎵 " +
-        (music.name || "Garba Music");
+        (
+            music.name ||
+            "Garba Music"
+        );
+
 
     player.src =
         music.url;
+
+
+    player.load();
+
 }
 
+
+/* =========================================================
+   ADS
+   ========================================================= */
 
 function setupAds(ads){
 
@@ -495,8 +735,11 @@ function setupAds(ads){
         !Array.isArray(ads) ||
         ads.length === 0
     ){
+
         return;
+
     }
+
 
     const section =
         document.getElementById(
@@ -508,15 +751,22 @@ function setupAds(ads){
             "adsGallery"
         );
 
+
     section.style.display =
         "block";
+
 
     showItems(
         ads,
         gallery
     );
+
 }
 
+
+/* =========================================================
+   LOAD GALLERY
+   ========================================================= */
 
 async function loadGallery(){
 
@@ -525,38 +775,93 @@ async function loadGallery(){
             "status"
         );
 
+
+    /* -----------------------------------------
+       Gallery ID
+       ----------------------------------------- */
+
     const galleryID =
         getGalleryID();
 
+
+    console.log(
+        "Gallery ID:",
+        galleryID
+    );
+
+
+    /* -----------------------------------------
+       ID नहीं मिला
+       ----------------------------------------- */
 
     if(!galleryID){
 
         status.className =
             "status error";
 
+
         status.innerHTML =
             "❌ Gallery Link सही नहीं है।<br><br>" +
-            "Link में <b>Gallery ID</b> होना चाहिए।";
+
+            "उदाहरण:<br>" +
+
+            "<small>" +
+
+            GALLERY_BASE_URL +
+
+            "?gallery=ABC123" +
+
+            "</small>";
+
 
         return;
+
     }
 
 
+    /* -----------------------------------------
+       Manifest URL
+       ----------------------------------------- */
+
     const manifestURL =
-        getManifestURL(galleryID);
+        getManifestURL(
+            galleryID
+        );
+
+
+    console.log(
+        "Manifest URL:",
+        manifestURL
+    );
 
 
     try{
+
+        status.className =
+            "status";
+
 
         status.innerHTML =
             "⏳ Gallery data लोड हो रहा है...";
 
 
+        /* -----------------------------------------
+           Cache हटाने के लिए timestamp
+           ----------------------------------------- */
+
+        const finalURL =
+            manifestURL +
+            "?t=" +
+            Date.now();
+
+
         const response =
             await fetch(
-                manifestURL +
-                "?t=" +
-                Date.now()
+                finalURL,
+                {
+                    method:"GET",
+                    cache:"no-store"
+                }
             );
 
 
@@ -567,6 +872,7 @@ async function loadGallery(){
                 response.status +
                 ")"
             );
+
         }
 
 
@@ -580,17 +886,33 @@ async function loadGallery(){
         );
 
 
-        const media =
-            Array.isArray(manifest.media)
-                ? manifest.media
-                : [];
+        /* -----------------------------------------
+           MEDIA
+           ----------------------------------------- */
 
+        const media =
+            Array.isArray(
+                manifest.media
+            )
+            ? manifest.media
+            : [];
+
+
+        /* -----------------------------------------
+           ADS
+           ----------------------------------------- */
 
         const ads =
-            Array.isArray(manifest.ads)
-                ? manifest.ads
-                : [];
+            Array.isArray(
+                manifest.ads
+            )
+            ? manifest.ads
+            : [];
 
+
+        /* -----------------------------------------
+           SHOW MEDIA
+           ----------------------------------------- */
 
         showItems(
             media,
@@ -600,40 +922,68 @@ async function loadGallery(){
         );
 
 
-        setupAds(ads);
+        /* -----------------------------------------
+           ADS
+           ----------------------------------------- */
 
+        setupAds(
+            ads
+        );
+
+
+        /* -----------------------------------------
+           MUSIC
+           ----------------------------------------- */
 
         setupMusic(
             manifest.music
         );
 
 
+        /* -----------------------------------------
+           SUCCESS
+           ----------------------------------------- */
+
         status.className =
             "status";
 
+
         status.innerHTML =
             "✅ Gallery तैयार है<br>" +
+
             "📸 " +
+
             media.length +
+
             " Photos/Videos" +
+
             (
                 ads.length
-                    ? " &nbsp; 📢 " +
-                      ads.length +
-                      " Ads"
-                    : ""
+                ? " &nbsp; 📢 " +
+                  ads.length +
+                  " Ads"
+                : ""
             );
 
 
-        if(manifest.colony){
+        /* -----------------------------------------
+           COLONY NAME
+           ----------------------------------------- */
+
+        if(
+            manifest.colony
+        ){
 
             document.title =
                 "🌺 माँ ना गरबा 🌺 - " +
                 manifest.colony;
+
         }
 
+    }
 
-    }catch(error){
+
+    catch(error){
 
         console.error(
             "Gallery Error:",
@@ -644,19 +994,36 @@ async function loadGallery(){
         status.className =
             "status error";
 
+
         status.innerHTML =
             "❌ Gallery लोड नहीं हो पाई।<br><br>" +
+
             "<small>" +
+
             (
                 error.message ||
-                error
+                String(error)
             ) +
+
             "</small>";
+
     }
+
 }
 
 
-loadGallery();
+/* =========================================================
+   START
+   ========================================================= */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function(){
+
+        loadGallery();
+
+    }
+);
 
 </script>
 
