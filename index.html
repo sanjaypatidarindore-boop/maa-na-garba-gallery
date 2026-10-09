@@ -1,20 +1,12 @@
 <!DOCTYPE html>
 <html lang="hi">
-
 <head>
-
 <meta charset="UTF-8">
-
-<meta name="viewport"
-      content="width=device-width,
-      initial-scale=1.0,
-      maximum-scale=1.0,
-      user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
 <title>🌺 माँ ना गरबा 🌺</title>
 
 <style>
-
 *{
     margin:0;
     padding:0;
@@ -22,851 +14,568 @@
 }
 
 body{
-    font-family:Arial,
-    "Noto Sans Devanagari",
-    sans-serif;
-
-    background:
-    linear-gradient(
-        135deg,
-        #fff4f4,
-        #ffe0d5,
-        #fff
-    );
-
+    font-family:Arial,"Noto Sans Devanagari",sans-serif;
+    background:linear-gradient(135deg,#fff4f4,#ffe0d5,#fff);
     color:#333;
     min-height:100vh;
 }
 
 .header{
-
-    background:
-    linear-gradient(
-        135deg,
-        #ff512f,
-        #dd2476
-    );
-
+    background:linear-gradient(135deg,#ff512f,#dd2476);
     color:white;
-
     text-align:center;
-
     padding:22px 12px;
-
-    box-shadow:
-    0 3px 12px
-    rgba(0,0,0,.25);
+    box-shadow:0 3px 12px rgba(0,0,0,.25);
 }
 
 .header h1{
-
-    font-size:30px;
-
+    font-size:28px;
     margin-bottom:7px;
 }
 
 .header p{
-
     font-size:15px;
-
-    line-height:1.6;
+    line-height:1.7;
 }
 
 .container{
-
     width:100%;
-
     max-width:1100px;
-
     margin:auto;
-
     padding:15px;
 }
 
 .statusBox{
-
     background:white;
-
     border-radius:14px;
-
     padding:14px;
-
     margin-bottom:15px;
-
     text-align:center;
-
-    box-shadow:
-    0 2px 10px
-    rgba(0,0,0,.10);
+    box-shadow:0 2px 10px rgba(0,0,0,.1);
 }
 
 .status{
-
     font-weight:bold;
-
     color:#555;
-
-    line-height:1.6;
+    line-height:1.7;
+    overflow-wrap:anywhere;
 }
 
+.loading{color:#8e24aa}
+.error{color:#d32f2f}
+
 .buttons{
-
     display:flex;
-
     justify-content:center;
-
     flex-wrap:wrap;
-
     gap:8px;
-
     margin-top:10px;
 }
 
 button{
-
     border:0;
-
     border-radius:22px;
-
-    padding:10px 18px;
-
+    padding:11px 18px;
     color:white;
-
     background:#8e24aa;
-
     font-weight:bold;
-
     cursor:pointer;
 }
 
-button:active{
-
-    transform:scale(.96);
+button:disabled{
+    opacity:.6;
 }
 
-#refreshBtn{
-
-    background:#ff6a00;
-}
+#refreshBtn{background:#ff6a00}
 
 .count{
-
-    margin-top:8px;
-
+    margin-top:9px;
     font-size:14px;
-
     color:#666;
 }
 
+.filters{
+    display:flex;
+    justify-content:center;
+    gap:8px;
+    flex-wrap:wrap;
+    margin-bottom:15px;
+}
+
+.filters button{background:#6a1b9a}
+.filters button.active{background:#e65100}
+
 .gallery{
-
     display:grid;
-
-    grid-template-columns:
-    repeat(
-        auto-fit,
-        minmax(
-            220px,
-            1fr
-        )
-    );
-
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
     gap:14px;
 }
 
 .card{
-
     background:white;
-
     border-radius:14px;
-
     overflow:hidden;
-
-    box-shadow:
-    0 3px 12px
-    rgba(0,0,0,.15);
+    box-shadow:0 3px 12px rgba(0,0,0,.15);
+    min-width:0;
 }
 
 .card img,
 .card video{
-
     width:100%;
-
     height:240px;
-
     display:block;
-
-    object-fit:cover;
-
+    object-fit:contain;
     background:#111;
 }
 
 .cardInfo{
-
     padding:10px;
-
     text-align:center;
 }
 
 .cardTitle{
-
     font-weight:bold;
-
     font-size:14px;
-
     color:#555;
-
-    word-break:break-word;
+    overflow-wrap:anywhere;
 }
 
-.empty{
+.cardDate{
+    font-size:12px;
+    color:#888;
+    margin-top:5px;
+}
 
-    background:white;
-
-    border-radius:15px;
-
-    padding:45px 15px;
-
+.mediaError{
+    background:#fff0f0;
+    color:#b71c1c;
+    padding:18px 10px;
     text-align:center;
-
-    color:#777;
-
-    box-shadow:
-    0 2px 10px
-    rgba(0,0,0,.1);
-}
-
-.loading{
-
-    color:#8e24aa;
-
-    font-weight:bold;
-}
-
-.error{
-
-    color:#d32f2f;
-
-    font-weight:bold;
-
-    word-break:break-word;
-}
-
-.footer{
-
-    text-align:center;
-
-    padding:25px 10px;
-
-    color:#777;
-
     font-size:13px;
 }
 
-@media(max-width:600px){
-
-    .header h1{
-
-        font-size:25px;
-    }
-
-    .gallery{
-
-        grid-template-columns:
-        repeat(
-            2,
-            minmax(0,1fr)
-        );
-
-        gap:10px;
-    }
-
-    .card img,
-    .card video{
-
-        height:180px;
-    }
-
-    .container{
-
-        padding:10px;
-    }
-
+.empty{
+    grid-column:1/-1;
+    background:white;
+    border-radius:15px;
+    padding:35px 15px;
+    text-align:center;
+    color:#777;
+    line-height:1.8;
 }
 
+.footer{
+    text-align:center;
+    padding:25px 10px;
+    color:#777;
+    font-size:13px;
+    line-height:1.8;
+}
+
+@media(max-width:600px){
+    .header h1{font-size:25px}
+    .container{padding:10px}
+    .gallery{
+        grid-template-columns:repeat(2,minmax(0,1fr));
+        gap:10px;
+    }
+    .card img,.card video{height:180px}
+}
 </style>
-
 </head>
-
 
 <body>
 
-
-<!-- =====================================================
-     HEADER
-===================================================== -->
-
 <header class="header">
-
-    <h1>
-        🌺 माँ ना गरबा 🌺
-    </h1>
-
+    <h1>🌺 माँ ना गरबा 🌺</h1>
     <p>
         रेडवुड पार्क प्रीमियम<br>
         नव गरबा मंडल • गरबा उत्सव 2026
     </p>
-
 </header>
-
-
-<!-- =====================================================
-     MAIN
-===================================================== -->
 
 <main class="container">
 
-
-    <div class="statusBox">
-
-        <div
-            id="status"
-            class="status">
-
+    <section class="statusBox">
+        <div id="status" class="status loading">
             ⏳ Online Gallery लोड हो रही है...
-
         </div>
-
 
         <div class="buttons">
-
-            <button
-                id="refreshBtn">
-
-                🔄 Gallery Refresh
-
-            </button>
-
+            <button id="refreshBtn">🔄 Gallery Refresh</button>
         </div>
 
+        <div id="count" class="count">0 Media</div>
+    </section>
 
-        <div
-            id="count"
-            class="count">
+    <nav class="filters">
+        <button class="active" data-filter="all">सभी</button>
+        <button data-filter="photo">📸 फोटो</button>
+        <button data-filter="video">🎥 वीडियो</button>
+    </nav>
 
-            0 Media
-
-        </div>
-
-    </div>
-
-
-    <!-- =================================================
-         GALLERY
-    ================================================== -->
-
-    <div
-        id="gallery"
-        class="gallery">
-
-    </div>
-
+    <section id="gallery" class="gallery"></section>
 
 </main>
 
-
 <footer class="footer">
-
     🌺 माँ ना गरबा 🌺<br>
-
     Redwood Park Premium • नव गरबा मंडल 2026<br>
-
     Editor: Sanjay Patidar
-
 </footer>
 
-
 <script>
+"use strict";
 
-/* =========================================================
+/* =========================================
    SUPABASE SETTINGS
-========================================================= */
+========================================= */
 
 const SUPABASE_URL =
     "https://pwdxbgjsduqqfsejednc.supabase.co";
 
-
 const SUPABASE_ANON_KEY =
     "sb_publishable_ccHBLTW0W4qBiZZn0qadXw_68bSUBnu";
 
+const TABLE_NAME = "garba_media";
 
-const TABLE_NAME =
-    "garba_media";
+/* =========================================
+   ELEMENTS
+========================================= */
 
+const statusEl = document.getElementById("status");
+const galleryEl = document.getElementById("gallery");
+const countEl = document.getElementById("count");
+const refreshBtn = document.getElementById("refreshBtn");
+const filterButtons = document.querySelectorAll("[data-filter]");
 
-/* =========================================================
-   DOM
-========================================================= */
+let allMedia = [];
+let currentFilter = "all";
+let loading = false;
 
-const statusEl =
-    document.getElementById(
-        "status"
-    );
+/* =========================================
+   HELPERS
+========================================= */
 
-
-const galleryEl =
-    document.getElementById(
-        "gallery"
-    );
-
-
-const countEl =
-    document.getElementById(
-        "count"
-    );
-
-
-const refreshBtn =
-    document.getElementById(
-        "refreshBtn"
-    );
-
-
-/* =========================================================
-   SUPABASE HEADERS
-========================================================= */
-
-function getHeaders(){
-
-    return {
-
-        "apikey":
-            SUPABASE_ANON_KEY,
-
-        "Authorization":
-            "Bearer " +
-            SUPABASE_ANON_KEY,
-
-        "Content-Type":
-            "application/json"
-
-    };
-
+function setStatus(message, type = "") {
+    statusEl.className = "status " + type;
+    statusEl.textContent = message;
 }
 
+function escapeHTML(value) {
+    return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
 
-/* =========================================================
+function normalizeUrl(value) {
+    return String(value || "").trim();
+}
+
+function getMediaType(item) {
+    const type = String(item.media_type || "").toLowerCase();
+    const url = normalizeUrl(item.media_url);
+
+    if (
+        ["video", "videos", "movie", "mp4"].includes(type) ||
+        isVideoUrl(url)
+    ) {
+        return "video";
+    }
+
+    if (
+        ["photo", "image", "images", "picture"].includes(type)
+    ) {
+        return "photo";
+    }
+
+    return isVideoUrl(url) ? "video" : "photo";
+}
+
+function isVideoUrl(url) {
+    const clean = String(url || "").split("#")[0].split("?")[0].toLowerCase();
+
+    return /\.(mp4|webm|mov|m4v|ogv|m3u8)$/.test(clean);
+}
+
+/* =========================================
+   REMOVE DUPLICATES
+   Same media URL is displayed only once.
+========================================= */
+
+function removeDuplicates(data) {
+    const seen = new Set();
+    const result = [];
+
+    for (const item of data) {
+        if (!item || !item.media_url) continue;
+
+        const url = normalizeUrl(item.media_url);
+
+        if (!url || seen.has(url)) continue;
+
+        seen.add(url);
+        result.push(item);
+    }
+
+    return result;
+}
+
+/* =========================================
    LOAD GALLERY
-========================================================= */
+========================================= */
 
-async function loadGallery(){
+async function loadGallery() {
+    if (loading) return;
 
-    statusEl.className =
-        "status loading";
+    loading = true;
+    refreshBtn.disabled = true;
 
-    statusEl.textContent =
-        "⏳ Supabase से Gallery लोड हो रही है...";
+    setStatus("⏳ Supabase से गैलरी लोड हो रही है...", "loading");
 
-
-    galleryEl.innerHTML = "";
-
-
-    countEl.textContent =
-        "0 Media";
-
-
-    try{
-
-        /*
-         * सीधे garba_media table से
-         * सभी records पढ़ना
-         */
-
-        const url =
+    try {
+        const endpoint =
             SUPABASE_URL +
             "/rest/v1/" +
             TABLE_NAME +
             "?select=id,title,media_url,media_type,created_at" +
-            "&order=created_at.asc";
+            "&order=created_at.desc";
 
+        const controller = new AbortController();
+        const timeout = setTimeout(() => controller.abort(), 20000);
 
-        const response =
-            await fetch(
-                url,
-                {
+        let response;
 
-                    method:"GET",
+        try {
+            response = await fetch(endpoint, {
+                method: "GET",
+                headers: {
+                    "apikey": SUPABASE_ANON_KEY,
+                    "Authorization": "Bearer " + SUPABASE_ANON_KEY
+                },
+                signal: controller.signal
+            });
+        } finally {
+            clearTimeout(timeout);
+        }
 
-                    headers:
-                        getHeaders()
-
-                }
-            );
-
-
-        if(!response.ok){
-
-            const errorText =
-                await response.text();
-
-
+        if (!response.ok) {
+            const message = await response.text();
             throw new Error(
-                "Supabase Error " +
-                response.status +
-                ": " +
-                errorText
+                "Supabase Error " + response.status + ": " + message
             );
-
         }
 
+        const data = await response.json();
 
-        const data =
-            await response.json();
+        if (!Array.isArray(data)) {
+            throw new Error("Supabase से सही डेटा नहीं मिला।");
+        }
 
+        allMedia = removeDuplicates(data);
 
-        if(
-            !Array.isArray(data) ||
-            data.length === 0
-        ){
+        renderGallery();
 
-            statusEl.className =
-                "status";
+        setStatus(
+            allMedia.length
+                ? "✅ Online Gallery तैयार है।"
+                : "📭 अभी कोई फोटो या वीडियो उपलब्ध नहीं है।",
+            ""
+        );
 
+    } catch (error) {
+        console.error("Gallery Error:", error);
 
-            statusEl.textContent =
-                "📭 अभी Online Gallery में कोई फोटो या वीडियो नहीं है।";
+        const message = error.name === "AbortError"
+            ? "इंटरनेट धीमा है। Refresh दबाकर दोबारा कोशिश करें।"
+            : error.message;
 
+        setStatus("❌ गैलरी लोड नहीं हुई: " + message, "error");
 
-            countEl.textContent =
-                "0 Media";
-
-
+        if (allMedia.length === 0) {
             galleryEl.innerHTML = `
-
                 <div class="empty">
-
-                    📸🎥<br><br>
-
-                    अभी कोई फोटो या वीडियो उपलब्ध नहीं है।<br>
-
-                    APK से Media Upload करने के बाद<br>
-
-                    यहाँ दिखाई देगा।
-
+                    ❌ गैलरी लोड नहीं हो सकी।<br><br>
+                    इंटरनेट, Supabase URL और SELECT permission जाँचें।
                 </div>
-
             `;
-
-            return;
-
+            countEl.textContent = "0 Media";
         }
-
-
-        /*
-         * Gallery बनाना
-         */
-
-        data.forEach(
-            function(item){
-
-                createMediaCard(
-                    item
-                );
-
-            }
-        );
-
-
-        statusEl.className =
-            "status";
-
-
-        statusEl.textContent =
-            "✅ Online Gallery तैयार है।";
-
-
-        countEl.textContent =
-            data.length +
-            " Media";
-
-
+    } finally {
+        loading = false;
+        refreshBtn.disabled = false;
     }
-    catch(error){
-
-        console.error(
-            "Gallery Error:",
-            error
-        );
-
-
-        statusEl.className =
-            "status error";
-
-
-        statusEl.textContent =
-            "❌ Gallery लोड नहीं हो सकी।";
-
-
-        galleryEl.innerHTML = `
-
-            <div class="empty error">
-
-                ❌ Supabase से Gallery लोड नहीं हुई।<br><br>
-
-                <small>
-                    ${escapeHTML(
-                        error.message
-                    )}
-                </small>
-
-                <br><br>
-
-                कृपया Supabase में
-                <b>garba_media</b>
-                table की SELECT permission/RLS policy जाँचें।
-
-            </div>
-
-        `;
-
-    }
-
 }
 
+/* =========================================
+   RENDER GALLERY
+========================================= */
 
-/* =========================================================
-   CREATE MEDIA CARD
-========================================================= */
+function renderGallery() {
+    galleryEl.innerHTML = "";
 
-function createMediaCard(item){
+    const visibleMedia = allMedia.filter(item => {
+        const type = getMediaType(item);
 
-    if(
-        !item ||
-        !item.media_url
-    ){
+        return currentFilter === "all" || type === currentFilter;
+    });
 
+    countEl.textContent =
+        visibleMedia.length + " Media";
+
+    if (visibleMedia.length === 0) {
+        galleryEl.innerHTML = `
+            <div class="empty">
+                📸🎥<br><br>
+                इस श्रेणी में अभी कोई मीडिया उपलब्ध नहीं है।
+            </div>
+        `;
         return;
-
     }
 
+    const fragment = document.createDocumentFragment();
 
-    const card =
-        document.createElement(
-            "div"
-        );
+    visibleMedia.forEach(item => {
+        const card = createMediaCard(item);
+        fragment.appendChild(card);
+    });
 
+    galleryEl.appendChild(fragment);
+}
 
-    card.className =
-        "card";
+/* =========================================
+   CREATE PHOTO / VIDEO CARD
+========================================= */
 
+function createMediaCard(item) {
+    const card = document.createElement("article");
+    card.className = "card";
+
+    const url = normalizeUrl(item.media_url);
+    const type = getMediaType(item);
 
     let mediaElement;
 
+    if (type === "video") {
+        mediaElement = document.createElement("video");
 
-    const type =
-        String(
-            item.media_type || ""
-        ).toLowerCase();
+        mediaElement.controls = true;
+        mediaElement.playsInline = true;
+        mediaElement.preload = "metadata";
+        mediaElement.setAttribute("playsinline", "");
+        mediaElement.setAttribute("webkit-playsinline", "");
 
+        /*
+         * Video playback starts only after user presses Play.
+         * Browsers do not allow reliable automatic sound playback.
+         */
 
-    /*
-     * VIDEO
-     */
+        const source = document.createElement("source");
+        source.src = url;
 
-    if(
-        type === "video" ||
-        isVideoUrl(
-            item.media_url
-        )
-    ){
+        if (/\.webm(?:$|[?#])/i.test(url)) {
+            source.type = "video/webm";
+        } else if (/\.m3u8(?:$|[?#])/i.test(url)) {
+            source.type = "application/vnd.apple.mpegurl";
+        } else {
+            source.type = "video/mp4";
+        }
 
-        mediaElement =
-            document.createElement(
-                "video"
-            );
+        mediaElement.appendChild(source);
 
+        mediaElement.addEventListener("error", () => {
+            showMediaError(card, "वीडियो नहीं चल सका। फाइल लिंक या वीडियो फॉर्मेट जाँचें।");
+        }, { once: true });
 
-        mediaElement.src =
-            item.media_url;
+    } else {
+        mediaElement = document.createElement("img");
 
+        mediaElement.src = url;
+        mediaElement.alt = item.title || "माँ ना गरबा";
+        mediaElement.loading = "lazy";
+        mediaElement.decoding = "async";
 
-        mediaElement.controls =
-            true;
-
-
-        mediaElement.playsInline =
-            true;
-
-
-        mediaElement.preload =
-            "metadata";
-
+        mediaElement.addEventListener("error", () => {
+            showMediaError(card, "फोटो लोड नहीं हुई। फोटो लिंक जाँचें।");
+        }, { once: true });
     }
 
+    card.appendChild(mediaElement);
 
-    /*
-     * PHOTO
-     */
+    const info = document.createElement("div");
+    info.className = "cardInfo";
 
-    else{
+    const title = document.createElement("div");
+    title.className = "cardTitle";
 
-        mediaElement =
-            document.createElement(
-                "img"
-            );
+    title.textContent = item.title ||
+        (type === "video" ? "🎥 Garba Video" : "📸 Garba Photo");
 
+    info.appendChild(title);
 
-        mediaElement.src =
-            item.media_url;
+    if (item.created_at) {
+        const date = document.createElement("div");
+        date.className = "cardDate";
 
+        const parsed = new Date(item.created_at);
 
-        mediaElement.alt =
-            item.title ||
-            "माँ ना गरबा";
+        if (!Number.isNaN(parsed.getTime())) {
+            date.textContent = parsed.toLocaleDateString("hi-IN");
+        }
 
-
-        mediaElement.loading =
-            "lazy";
-
+        info.appendChild(date);
     }
 
+    card.appendChild(info);
 
-    mediaElement.onerror =
-        function(){
-
-            mediaElement.style.display =
-                "none";
-
-        };
-
-
-    card.appendChild(
-        mediaElement
-    );
-
-
-    const info =
-        document.createElement(
-            "div"
-        );
-
-
-    info.className =
-        "cardInfo";
-
-
-    const title =
-        document.createElement(
-            "div"
-        );
-
-
-    title.className =
-        "cardTitle";
-
-
-    title.textContent =
-        item.title ||
-        (
-            type === "video"
-            ? "🎥 Garba Video"
-            : "📸 Garba Photo"
-        );
-
-
-    info.appendChild(
-        title
-    );
-
-
-    card.appendChild(
-        info
-    );
-
-
-    galleryEl.appendChild(
-        card
-    );
-
+    return card;
 }
 
+/* =========================================
+   MEDIA ERROR MESSAGE
+========================================= */
 
-/* =========================================================
-   VIDEO URL CHECK
-========================================================= */
+function showMediaError(card, message) {
+    if (card.querySelector(".mediaError")) return;
 
-function isVideoUrl(url){
+    const errorBox = document.createElement("div");
+    errorBox.className = "mediaError";
+    errorBox.textContent = message;
 
-    const cleanUrl =
-        String(url || "")
-            .split("?")[0]
-            .toLowerCase();
-
-
-    return (
-        cleanUrl.endsWith(".mp4") ||
-        cleanUrl.endsWith(".webm") ||
-        cleanUrl.endsWith(".mov") ||
-        cleanUrl.endsWith(".m4v")
-    );
-
+    card.appendChild(errorBox);
 }
 
+/* =========================================
+   FILTER BUTTONS
+========================================= */
 
-/* =========================================================
-   ESCAPE HTML
-========================================================= */
+filterButtons.forEach(button => {
+    button.addEventListener("click", () => {
+        currentFilter = button.dataset.filter;
 
-function escapeHTML(text){
+        filterButtons.forEach(btn => {
+            btn.classList.toggle("active", btn === button);
+        });
 
-    return String(
-        text || ""
-    )
-    .replace(
-        /&/g,
-        "&amp;"
-    )
-    .replace(
-        /</g,
-        "&lt;"
-    )
-    .replace(
-        />/g,
-        "&gt;"
-    )
-    .replace(
-        /"/g,
-        "&quot;"
-    )
-    .replace(
-        /'/g,
-        "&#039;"
-    );
+        renderGallery();
+    });
+});
 
-}
+/* =========================================
+   REFRESH BUTTON
+========================================= */
 
+refreshBtn.addEventListener("click", loadGallery);
 
-/* =========================================================
-   REFRESH
-========================================================= */
-
-refreshBtn.onclick =
-    function(){
-
-        loadGallery();
-
-    };
-
-
-/* =========================================================
+/* =========================================
    START
-========================================================= */
+========================================= */
 
 loadGallery();
 
-
 </script>
-
 </body>
-
 </html>
